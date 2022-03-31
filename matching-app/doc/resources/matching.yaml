@@ -1,0 +1,18 @@
+matching:
+  post:
+    tags:
+      - Matching
+    summary: Nearest driver Location
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/matching_schema.yaml'
+            example:
+              latitude: 40.94276161
+              longitude: 29.03934232 
+              RadiusInKm: 5 
+
+    responses:
+      '200':
+        $ref: '../responses/success_response.yaml'

@@ -1,0 +1,33 @@
+addDriver:
+  post:
+    tags:
+      - Driver
+    summary: Insert driver
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/driver_schema.yaml'
+            example:
+              latitude: 40.94276161
+              longitude: 29.03934232  
+    responses:
+      '200':
+        $ref: '../responses/success_response.yaml'
+addDrivers:
+  post:
+    tags:
+      - Drivers
+    summary: Insert drivers
+    requestBody:
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              file:
+                type: string
+                format: binary  
+    responses:
+      '200':
+        $ref: '../responses/success_response.yaml'
