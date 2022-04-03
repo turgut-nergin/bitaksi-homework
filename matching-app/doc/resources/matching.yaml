@@ -1,3 +1,36 @@
+login:
+  post:
+    tags:
+      - Matching
+    summary: Nearest driver Location
+    requestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              authenticated:
+                type: boolean
+    responses:
+      200:
+        description: Successful login
+        headers: 
+          Set-Cookie:
+            schema: 
+              type: string
+              example: name=token; value=tokenValue
+      400:
+        description: Bad Request
+      404:
+        schema:
+          type: string
+        description: User not found
+      500:
+        schema:
+          type: string
+        description: Server error
+
+
 matching:
   post:
     tags:
@@ -7,12 +40,32 @@ matching:
       content:
         application/json:
           schema:
-            $ref: '../schemas/matching_schema.yaml'
+            type: object
+            properties:
+              latitude:
+                type: number
+                format: double
+              longitude: 
+                type: number
+                format: double
             example:
               latitude: 40.94276161
               longitude: 29.03934232 
-              RadiusInKm: 5 
-
+              radiusInKm: 5 
+    security:
+      - BearerAuth: []
     responses:
-      '200':
-        $ref: '../responses/success_response.yaml'
+      401:
+        description: Item Not Found
+      200:
+        description: Successful response
+        content:
+          application/json: {}
+      400:
+        description: Bad Request
+      404:
+        description: Item Not Found
+      500:
+        schema:
+          type: string
+          description: Server error

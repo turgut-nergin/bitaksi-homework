@@ -2,11 +2,11 @@ package repository
 
 import (
 	"context"
-	"log"
 
 	"homework.driver-service/common"
 
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -33,9 +33,7 @@ func (dR *DriverRepository) AddLocation(location LocationPoint) {
 
 }
 
-func (dR *DriverRepository) GetDriversDistance(radiusInKm float64, location LocationPoint) []DriverInRangeDto {
-	collection := dR.db.Collection("drivers")
-	stages := mongo.Pipeline{}
+func buildNearbyStage(location LocationPoint, radiusInKm float64) primitive.D {
 	getNearbyStage := bson.D{{"$geoNear", bson.M{
 		"near": bson.M{
 			"type":        location.Type,
@@ -45,20 +43,27 @@ func (dR *DriverRepository) GetDriversDistance(radiusInKm float64, location Loca
 		"spherical":          true,
 		"distanceField":      "distance",
 		"distanceMultiplier": 0.001}}}
+	return getNearbyStage
+}
+
+func (dR *DriverRepository) GetDriversDistance(radiusInKm float64, location LocationPoint) ([]DriverInRangeDto, error) {
+	collection := dR.db.Collection("drivers")
+	stages := mongo.Pipeline{}
+	getNearbyStage := buildNearbyStage(location, radiusInKm)
 
 	stages = append(stages, getNearbyStage)
 
 	cursor, err := collection.Aggregate(context.TODO(), stages)
 
 	if err != nil {
-		log.Println(err)
-		return nil
+		return nil, err
 	}
 
 	defer cursor.Close(context.TODO())
 	var driverDistances []DriverInRangeDto
 	cursor.All(context.TODO(), &driverDistances)
-	return driverDistances
+
+	return driverDistances, err
 
 }
 

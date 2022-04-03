@@ -14,10 +14,11 @@ type DriverController struct {
 }
 
 func corsConfiguration(w http.ResponseWriter, mehtod string) {
-	w.Header().Add("Access-Control-Allow-Origin", "*")
-	w.Header().Add("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Origin, Cache-Control")
-	w.Header().Add("Access-Control-Allow-Methods", mehtod)
-	w.Header().Add("Access-Control-Allow-Credentials", "true")
+	header := w.Header()
+	header.Add("Access-Control-Allow-Origin", "*")
+	header.Add("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Origin, Cache-Control")
+	header.Add("Access-Control-Allow-Methods", mehtod)
+	header.Add("Access-Control-Allow-Credentials", "true")
 }
 
 func (dC DriverController) insertOne(w http.ResponseWriter, req *http.Request) {

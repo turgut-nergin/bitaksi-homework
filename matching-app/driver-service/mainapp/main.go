@@ -21,13 +21,13 @@ func getDatabase() *mongo.Database {
 	client, err := mongo.Connect(context.TODO(), clientOptions)
 
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 
 	err = client.Ping(context.TODO(), nil)
 
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 
 	log.Println("Connected to MongoDB!")

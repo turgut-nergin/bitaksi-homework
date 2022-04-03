@@ -10,10 +10,15 @@ tags:
   - name: matching
 paths:
   /matching:
-    $ref: './resources/matching.yaml#/matching'   
-      
+    $ref: './resources/matching.yaml#/matching' 
+  /login:
+    $ref: './resources/matching.yaml#/login' 
+schemes:
+  - http   # https in a normal setup
+
 components:
-  schemas:
-    Drivers:
-      $ref: './schemas/matching_schema.yaml'
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
 

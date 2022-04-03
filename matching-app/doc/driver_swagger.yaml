@@ -14,8 +14,3 @@ paths:
   /driver/insert/bulk:
     $ref: './resources/driver.yaml#/addDrivers' 
       
-components:
-  schemas:
-    Drivers:
-      $ref: './schemas/driver_schema.yaml'
-

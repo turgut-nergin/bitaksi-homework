@@ -7,13 +7,22 @@ addDriver:
       content:
         application/json:
           schema:
-            $ref: '../schemas/driver_schema.yaml'
+            type: object
+            properties:
+              latitude:
+                type: number
+                format: double
+              longitude: 
+                type: number
+                format: double
             example:
               latitude: 40.94276161
               longitude: 29.03934232  
     responses:
       '200':
-        $ref: '../responses/success_response.yaml'
+        description: Successful response
+        content:
+          application/json: {}
 addDrivers:
   post:
     tags:
@@ -30,4 +39,6 @@ addDrivers:
                 format: binary  
     responses:
       '200':
-        $ref: '../responses/success_response.yaml'
+        description: Successful response
+        content:
+          application/json: {}

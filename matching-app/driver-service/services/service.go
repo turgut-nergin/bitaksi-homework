@@ -17,7 +17,7 @@ type DriverService struct {
 	driverRepository *repository.DriverRepository
 }
 
-type cvsFileLocaitonColumnInfo struct {
+type cvsFileLocationColumnInfo struct {
 	LatitudeIndex  int
 	LongitudeIndex int
 }
@@ -55,18 +55,21 @@ func (d *DriverService) GetDrivers(locaitonData *json.Decoder) ([]repository.Dri
 	var locationPoint repository.LocationPoint
 	locationPoint.Type = "Point"
 	locationPoint.Coordinates = []float64{locationDto.Latitude, locationDto.Longitude}
-	driversDistance := d.driverRepository.GetDriversDistance(locationDto.RadiusInKm, locationPoint)
+	driversDistance, err := d.driverRepository.GetDriversDistance(locationDto.RadiusInKm, locationPoint)
+	if err != nil {
+		return nil, err
+	}
 	return driversDistance, nil
 }
 
-func checkIsvalidLatLong(latLong []string, locationRowIndex *cvsFileLocaitonColumnInfo) (bool, []float64) {
+func isLatLongValid(latLong []string, locationRowIndex *cvsFileLocationColumnInfo) (bool, []float64) {
 	latitude, err := strconv.ParseFloat(latLong[locationRowIndex.LatitudeIndex], 64)
 	if err != nil {
 		log.Fatal("Not Valid latitude values")
 		return false, nil
 	}
 
-	if latitude > 180 && latitude < -180 {
+	if latitude > 180 || latitude < -180 {
 		log.Fatal("Not Valid latitude values")
 		return false, nil
 	}
@@ -78,7 +81,7 @@ func checkIsvalidLatLong(latLong []string, locationRowIndex *cvsFileLocaitonColu
 		return false, nil
 	}
 
-	if longitude > 90 && longitude < -90 {
+	if longitude > 90 || longitude < -90 {
 		log.Fatal("Not Valid latitude values")
 		return false, nil
 	}
@@ -87,9 +90,9 @@ func checkIsvalidLatLong(latLong []string, locationRowIndex *cvsFileLocaitonColu
 
 }
 
-func getLatAndLongRowIndex(heads []string) (*cvsFileLocaitonColumnInfo, error) {
+func getLatAndLongRowIndex(heads []string) (*cvsFileLocationColumnInfo, error) {
 
-	var locationRowIndex cvsFileLocaitonColumnInfo
+	var locationRowIndex cvsFileLocationColumnInfo
 
 	if isLatitude := strings.ContainsAny(heads[0], "lat"); isLatitude {
 		locationRowIndex.LatitudeIndex = 0
@@ -105,11 +108,11 @@ func getLatAndLongRowIndex(heads []string) (*cvsFileLocaitonColumnInfo, error) {
 	return nil, errors.New("The file can not be parsed!")
 }
 
-func parseCvsToLocationDto(locationLinesCsvr [][]string, locationRowIndex *cvsFileLocaitonColumnInfo) []common.LocationDto {
+func parseCvsToLocationDto(locationLinesCsvr [][]string, locationRowIndex *cvsFileLocationColumnInfo) []common.LocationDto {
 	var locations []common.LocationDto
 	var location common.LocationDto
 	for _, line := range locationLinesCsvr {
-		isValid, latLong := checkIsvalidLatLong(line, locationRowIndex)
+		isValid, latLong := isLatLongValid(line, locationRowIndex)
 		if isValid {
 			location.Latitude = latLong[locationRowIndex.LatitudeIndex]
 			location.Longitude = latLong[locationRowIndex.LongitudeIndex]

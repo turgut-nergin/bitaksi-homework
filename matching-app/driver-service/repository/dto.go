@@ -5,7 +5,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-type DriverRepository struct {
+type DriverRepository struct { //It must be move, driver repository struct is not dto
 	db *mongo.Database
 }
 
