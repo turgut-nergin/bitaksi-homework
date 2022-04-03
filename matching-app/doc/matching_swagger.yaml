@@ -1,0 +1,24 @@
+openapi: 3.0.0
+info:
+  title: API documentation
+  version: 1.0.0
+  schemes:
+    - http
+servers:
+  - url: http://0.0.0.0:8081
+tags:
+  - name: matching
+paths:
+  /matching:
+    $ref: './resources/matching.yaml#/matching' 
+  /login:
+    $ref: './resources/matching.yaml#/login' 
+schemes:
+  - http  
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+

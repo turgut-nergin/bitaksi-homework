@@ -1,0 +1,66 @@
+login:
+  post:
+    tags:
+      - Login
+    requestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              authenticated:
+                type: boolean
+    responses:
+      200:
+        description: Successful login
+        headers: 
+          Set-Cookie:
+            schema: 
+              type: string
+              example: name=token; value=tokenValue
+      401:
+        description: Unauthorized
+      400:
+        description: Bad Request
+      404:
+        description: Item Not Found
+      500:
+        description: Server error
+
+
+matching:
+  post:
+    tags:
+      - Matching
+    summary: Nearest driver Location
+    requestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              latitude:
+                type: number
+                format: double
+              longitude: 
+                type: number
+                format: double
+            example:
+              latitude: 40.94276161
+              longitude: 29.03934232 
+              radiusInKm: 5 
+    security:
+      - BearerAuth: []
+    responses:
+      401:
+        description: unauthorized
+      200:
+        description: Successful response
+        content:
+          application/json: {}
+      400:
+        description: Bad Request
+      404:
+        description: Item Not Found
+      500:
+        description: Server error

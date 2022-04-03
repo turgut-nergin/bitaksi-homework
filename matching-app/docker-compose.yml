@@ -1,0 +1,59 @@
+version: "3.9"
+services:
+  matching-service:
+    container_name: matching_container
+    build:
+        context: matching-service
+    image: bitaksi/matching-service
+    ports:
+      - "8081:8081"
+    networks:
+      service-network:
+        aliases:
+          - matching-service
+
+  driver-service:
+    container_name: driver_container
+    build:
+      context: driver-service
+
+    image: bitaksi/driver-service
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mongo-db
+    networks:
+      service-network:
+        aliases:
+          - driver-service
+    restart: on-failure
+
+  mongo-db:
+    image: mongo
+    container_name: mongo_container
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      service-network:
+        aliases:
+          - mongo-db
+  swagger-ui:
+    image: swaggerapi/swagger-ui
+    container_name: swagger_service_container
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./doc:/usr/share/nginx/html/doc
+    networks:
+      service-network:
+        aliases:
+          - swagger-ui
+    environment:
+      URLS: "[{ url: \"doc/driver_swagger.yaml\", name: \"Drivers\" }, 
+      { url: \"doc/matching_swagger.yaml\", name: \"Matching\" }]"
+
+volumes:
+  mongo-data:
+
+networks:
+  service-network:

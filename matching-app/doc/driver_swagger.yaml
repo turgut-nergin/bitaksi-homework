@@ -1,0 +1,16 @@
+openapi: 3.0.0
+info:
+  title: API documentation
+  version: 1.0.0
+  schemes:
+    - http
+servers:
+  - url: http://0.0.0.0:8000
+tags:
+  - name: drivers
+paths:
+  /driver/insert:
+    $ref: './resources/driver.yaml#/addDriver'   
+  /driver/insert/bulk:
+    $ref: './resources/driver.yaml#/addDrivers' 
+      
