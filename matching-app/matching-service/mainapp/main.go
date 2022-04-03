@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	driverClient := client.New("BITAKSI_API_KEY")
+	driverClient := client.New("bi_taksi_api_key")
 	matchingService := services.New(driverClient)
 	matchingController := controllers.New(matchingService)
 	log.Println("- Matching Service 8081 -")

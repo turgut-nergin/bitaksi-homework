@@ -14,7 +14,7 @@ paths:
   /login:
     $ref: './resources/matching.yaml#/login' 
 schemes:
-  - http   # https in a normal setup
+  - http  
 
 components:
   securitySchemes:

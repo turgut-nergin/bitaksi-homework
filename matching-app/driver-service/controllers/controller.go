@@ -71,7 +71,7 @@ func (dC DriverController) getDriversInRange(w http.ResponseWriter, req *http.Re
 	}
 
 	apiKey := req.Header.Get("apiKey")
-	if apiKey != "BITAKSI_API_KEY" {
+	if apiKey != "bi_taksi_api_key" {
 		fmt.Fprintf(w, "%s\n", "Permission Denied!")
 		return
 	}

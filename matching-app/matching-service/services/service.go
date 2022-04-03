@@ -12,7 +12,7 @@ type MatchingService struct {
 	client *client.DriverClient
 }
 
-func isValidLocationDto(locationData *common.MatchingRequestDto) error {
+func (driverClient *MatchingService) IsValidLocationDto(locationData *common.MatchingRequestDto) error {
 	latitude := locationData.Latitude
 	longitude := locationData.Longitude
 
@@ -35,7 +35,7 @@ func (driverClient *MatchingService) MathchingDriver(locationData *json.Decoder)
 		return nil, err
 	}
 
-	if err := isValidLocationDto(&locationDto); err != nil {
+	if err := driverClient.IsValidLocationDto(&locationDto); err != nil {
 		return nil, err
 	}
 

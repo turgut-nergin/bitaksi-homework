@@ -29,14 +29,15 @@ func (d *DriverService) InsertOne(locationData *json.Decoder) error {
 		return err
 	}
 
-	if locationDto.Latitude > 180 || locationDto.Latitude < -180 {
+	latitude := locationDto.Latitude
+	longitude := locationDto.Longitude
+	if latitude > 180 || latitude < -180 {
 		return errors.New("Not Valid latitude values!")
 	}
 
-	if locationDto.Longitude > 90 || locationDto.Longitude < -90 {
+	if longitude > 90 || longitude < -90 {
 		return errors.New("Not Valid latitude values!")
 	}
-
 	var locationPoint repository.LocationPoint
 	locationPoint.Type = "Point"
 	locationPoint.Coordinates = []float64{locationDto.Latitude, locationDto.Longitude}

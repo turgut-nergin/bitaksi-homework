@@ -23,20 +23,7 @@ func getErrorIfMethodNotAllowed(req *http.Request, method string) error {
 	return nil
 }
 
-var jwtKey = []byte("BITAKSI_API_KEY")
-
-type Credentials struct {
-	Authenticated bool `json:"authenticated"`
-}
-
-type Claims struct {
-	jwt.StandardClaims
-}
-
-type loginConfig struct {
-	Name  string
-	Value string
-}
+var jwtKey = []byte("bi_taksi_api_key")
 
 func corsConfiguration(w http.ResponseWriter, mehtod string) {
 	w.Header().Add("Access-Control-Allow-Origin", "*")
@@ -94,7 +81,7 @@ func (mC MatchingController) matchDriver(w http.ResponseWriter, req *http.Reques
 	splitToken := strings.Split(reqToken, "Bearer")
 
 	if len(splitToken) != 2 {
-		fmt.Fprintf(w, "Invalid Authorization Contain!")
+		fmt.Fprintf(w, "Invalid Authorization")
 		return
 	}
 
